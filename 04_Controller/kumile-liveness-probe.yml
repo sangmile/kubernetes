@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kumile-liveness
+spec:
+  containers:
+  - image: sangmile/kumile-unhealthy
+    name: kumile
+    livenessProbe:
+      httpGet:
+        path: /
+        port: 8080

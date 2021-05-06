@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kumile-manual
+spec:
+  containers:
+  - image: sangmile/kumile
+    name: kumile
+    ports:
+    - containerPort: 8080
+      protocol: TCP
