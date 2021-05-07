@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kumile-named-port
+  labels:
+    app: kumile-named-port
+spec:
+  containers:
+  - image: sangmile/kumile
+    name: kumile
+    ports:
+    - name: http
+      containerPort: 8080
+      

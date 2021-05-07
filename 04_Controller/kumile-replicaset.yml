@@ -1,0 +1,17 @@
+apiVersion: apps/v1beta2
+kind: ReplicaSet
+metadata:
+  name: kumile
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kumile
+  template:
+    metadata:
+      labels:
+        app: kumile
+    spec:
+      containers:
+      - name: kumile
+        image: sangmile/kumile
