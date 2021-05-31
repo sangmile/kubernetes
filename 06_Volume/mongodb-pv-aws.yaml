@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongodb-pv
+spec:
+  capacity: 
+    storage: 10Gi
+  accessModes:                  
+    - ReadWriteOnce                         # 단일 클라이언트의 읽기/쓰기용
+    - ReadOnlyMany                          # 여러 클라이언트를 위한 읽기 전용
+  persistentVolumeReclaimPolicy: Retain     # 클레임이 해제된 후 PV는 유지
+  awsElasticBlockStore:
+    volumeID: vol-010040504e6faad05
+    fsType: ext4

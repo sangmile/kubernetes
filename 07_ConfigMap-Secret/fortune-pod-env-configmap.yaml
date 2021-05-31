@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fortune-env-from-configmap
+spec:
+  containers:
+  - image: sangmile/fortune:env
+    env:
+    - name: INTERVAL                    # INTERVAL 환경변수 설정
+      valueFrom:                        # 컨피그맵 키에서 값을 가져옴
+        configMapKeyRef:
+          name: fortune-config          # 참조하는 컨피그맵 이름
+          key: sleep-interval           # 해당 키에 저장된 값으로 변수 설정
+    name: html-generator
+    volumeMounts:
+    - name: html
+      mountPath: /var/htdocs
+  - image: nginx:alpine
+    name: web-server
+    volumeMounts:
+    - name: html
+      mountPath: /usr/share/nginx/html
+      readOnly: true
+    ports:
+    - containerPort: 80
+      protocol: TCP
+  volumes:
+  - name: html
+    emptyDir: {}
