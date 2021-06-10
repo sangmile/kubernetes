@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: downward
+  labels:               # 이 레이블과 어노테이션은
+    foo: bar            # downwardAPI 볼륨으로 노출됨.
+  annotations:
+    key1: value1
+    key2: |             
+      multi
+      line
+      value
+spec:
+  containers:
+  - name: main
+    image: busybox
+    command: ["sleep", "9999999"]
+    resources:
+      requests:
+        cpu: 50m
+        memory: 100Mi
+      limits:
+        cpu: 100m
+        memory: 200Mi
+    volumeMounts:                               # downward 볼륨은
+    - name: downward                            # /etc/downward
+      mountPath: /etc/downward                  # 아래에 마운트
+  volumes:
+  - name: downward                              # downwardAPI 볼륨은
+    downwardAPI:                                # downward라는 이름으로 정의
+      items:
+      - path: "podName"                         # 파드의 이름
+        fieldRef:                               # (매니페스트 metadata.name)
+          fieldPath: metadata.name              # podName 파일에 기록
+      - path: "podNamespace"
+        fieldRef:
+          fieldPath: metadata.namespace
+      - path: "labels"                          # 파드의 레이블
+        fieldRef:                               # /etc/downward/labels
+          fieldPath: metadata.labels            # 파일에 기록
+      - path: "annotations"                     # 파드의 어노테이션
+        fieldRef:                               # /etc/downward/annotations
+          fieldPath: metadata.annotations       # 파일에 기록
+      - path: "containerCpuRequestMilliCores"
+        resourceFieldRef:
+          containerName: main
+          resource: requests.cpu
+          divisor: 1m
+      - path: "containerMemoryLimitBytes"
+        resourceFieldRef:
+          containerName: main
+          resource: limits.memory
+          divisor: 1
