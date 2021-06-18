@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kumile-public
+spec:
+  selector:
+    app: kumile
+  ports:
+  - port: 80
+    targetPort: 8080

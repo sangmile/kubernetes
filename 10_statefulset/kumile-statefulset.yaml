@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kumile
+spec:
+  serviceName: kumile
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kumile # has to match .spec.template.metadata.labels
+  template:
+    metadata:
+      labels:
+        app: kumile
+    spec:
+      containers:
+      - name: kumile
+        image: sangmile/kumile-pet
+        ports:
+        - name: http
+          containerPort: 8080
+        volumeMounts:
+        - name: data
+          mountPath: /var/data
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      resources:
+        requests:
+          storage: 1Gi
+      accessModes:
+      - ReadWriteOnce
